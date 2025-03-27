@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2>Tüm İlanlar</h2>
+            {% if user.is_authenticated and user.kullaniciprofil.rol == 'kurum' %}
+            <a href="{% url 'ilan_ekle' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Yeni İlan Oluştur
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="row">
+        {% for ilan in ilanlar %}
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ ilan.baslik }}</h5>
+                    <p class="card-text">{{ ilan.aciklama|truncatewords:30 }}</p>
+                    <ul class="list-unstyled">
+                        <li><strong>Kurum:</strong> {{ ilan.kurum.ad }}</li>
+                        <li><strong>Konum:</strong> {{ ilan.konum }}</li>
+                        <li><strong>Başlangıç:</strong> {{ ilan.baslangic_tarihi }}</li>
+                        <li><strong>Bitiş:</strong> {{ ilan.bitis_tarihi }}</li>
+                        <li><strong>Kontenjan:</strong> {{ ilan.kontenjan }}</li>
+                        <li><strong>Durum:</strong> 
+                            {% if ilan.aktif %}
+                            <span class="badge bg-success">Aktif</span>
+                            {% else %}
+                            <span class="badge bg-danger">Pasif</span>
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'ilan_detay' ilan.id %}" class="btn btn-primary">Detayları Gör</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-md-12">
+            <div class="alert alert-info">
+                Henüz ilan eklenmemiş.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Hero Section -->
+    <div class="row mb-5">
+        <div class="col-md-12 text-center">
+            <h1 class="display-4">Gönüllülük Platformu</h1>
+            <p class="lead">Toplumsal fayda için gönüllü olun, fark yaratın!</p>
+            <a href="{% url 'ilanlar' %}" class="btn btn-primary btn-lg">İlanları Görüntüle</a>
+        </div>
+    </div>
+
+    <!-- Son İlanlar -->
+    <div class="row mb-5">
+        <div class="col-md-12">
+            <h2 class="mb-4">Son Eklenen İlanlar</h2>
+        </div>
+        {% for ilan in son_ilanlar %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ ilan.baslik }}</h5>
+                    <p class="card-text">{{ ilan.aciklama|truncatewords:30 }}</p>
+                    <ul class="list-unstyled">
+                        <li><strong>Kurum:</strong> {{ ilan.kurum.ad }}</li>
+                        <li><strong>Konum:</strong> {{ ilan.konum }}</li>
+                        <li><strong>Başlangıç:</strong> {{ ilan.baslangic_tarihi }}</li>
+                        <li><strong>Bitiş:</strong> {{ ilan.bitis_tarihi }}</li>
+                        <li><strong>Kontenjan:</strong> {{ ilan.kontenjan }}</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'ilan_detay' ilan.id %}" class="btn btn-primary">Detayları Gör</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-md-12">
+            <div class="alert alert-info">
+                Henüz ilan eklenmemiş.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Nasıl Çalışır -->
+    <div class="row mb-5">
+        <div class="col-md-12 text-center">
+            <h2 class="mb-4">Nasıl Çalışır?</h2>
+        </div>
+        <div class="col-md-4">
+            <div class="text-center">
+                <i class="fas fa-user-plus fa-3x mb-3"></i>
+                <h4>1. Kayıt Ol</h4>
+                <p>Gönüllü veya kurum olarak kayıt olun.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="text-center">
+                <i class="fas fa-search fa-3x mb-3"></i>
+                <h4>2. İlanları İncele</h4>
+                <p>Size uygun gönüllülük ilanlarını bulun.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="text-center">
+                <i class="fas fa-handshake fa-3x mb-3"></i>
+                <h4>3. Başvur</h4>
+                <p>İstediğiniz ilana başvurun ve fark yaratın.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+<h1>Kurum Paneli</h1>
+
+<p><a href="{% url 'ilan_ekle' %}">+ Yeni İlan Oluştur</a></p>
+
+<h2>İlanlarınız</h2>
+{% if ilanlar %}
+    <ul>
+    {% for ilan in ilanlar %}
+        <li><strong>{{ ilan.baslik }}</strong> - {{ ilan.konum }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Henüz bir ilanınız yok.</p>
+{% endif %}

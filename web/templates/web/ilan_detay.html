@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ ilan.baslik }}</title>
+</head>
+<body>
+    <h1>{{ ilan.baslik }}</h1>
+    <p><strong>Kurum:</strong> {{ ilan.kurum.ad }}</p>
+    <p><strong>Açıklama:</strong> {{ ilan.aciklama }}</p>
+    <p><strong>Konum:</strong> {{ ilan.konum }}</p>
+    <p><strong>Tarih:</strong> {{ ilan.baslangic_tarihi }} → {{ ilan.bitis_tarihi }}</p>
+    <p><strong>Kontenjan:</strong> {{ ilan.kontenjan }}</p>
+
+    <hr>
+
+    <h2>Başvuru Yap</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Başvur</button>
+    </form>
+
+    <br>
+    <a href="/">← Anasayfaya dön</a>
+</body>
+</html>

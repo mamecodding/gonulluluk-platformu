@@ -1,0 +1,9 @@
+<h1>Yeni İlan Oluştur</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Kaydet</button>
+</form>
+
+<a href="{% url 'kurum_panel' %}">← Geri dön</a>
