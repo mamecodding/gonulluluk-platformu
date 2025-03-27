@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title mb-0">Başvuru Değerlendir</h4>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h5>Başvuru Detayları</h5>
+                        <p><strong>İlan:</strong> {{ basvuru.ilan.baslik }}</p>
+                        <p><strong>Gönüllü:</strong> {{ basvuru.gonullu.ad }} {{ basvuru.gonullu.soyad }}</p>
+                        <p><strong>E-posta:</strong> {{ basvuru.gonullu.email }}</p>
+                        <p><strong>Telefon:</strong> {{ basvuru.gonullu.telefon }}</p>
+                        <p><strong>Başvuru Tarihi:</strong> {{ basvuru.basvuru_tarihi|date:"d.m.Y H:i" }}</p>
+                        <p><strong>Gerekçe:</strong> {{ basvuru.gerekce }}</p>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Değerlendirme</label>
+                            <div class="d-flex gap-3">
+                                <button type="submit" name="durum" value="kabul" class="btn btn-success">
+                                    <i class="fas fa-check"></i> Kabul Et
+                                </button>
+                                <button type="submit" name="durum" value="red" class="btn btn-danger">
+                                    <i class="fas fa-times"></i> Reddet
+                                </button>
+                                <a href="{% url 'basvurular' basvuru.ilan.id %}" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> Geri Dön
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

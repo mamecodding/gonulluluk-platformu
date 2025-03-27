@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2>Başvurular</h2>
+            <p class="text-muted">{{ ilan.baslik }}</p>
+        </div>
+        <div class="col-auto">
+            <a href="{% url 'kurum_panel' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Panele Dön
+            </a>
+        </div>
+    </div>
+
+    {% if messages %}
+    <div class="messages mb-4">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title mb-0">Başvuru Listesi</h4>
+        </div>
+        <div class="card-body">
+            {% if basvurular %}
+                <div class="list-group">
+                {% for basvuru in basvurular %}
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="mb-1">{{ basvuru.gonullu.ad }} {{ basvuru.gonullu.soyad }}</h5>
+                                <p class="mb-1"><strong>E-posta:</strong> {{ basvuru.gonullu.email }}</p>
+                                <p class="mb-1"><strong>Telefon:</strong> {{ basvuru.gonullu.telefon }}</p>
+                                <p class="mb-1"><strong>Başvuru Tarihi:</strong> {{ basvuru.basvuru_tarihi|date:"d.m.Y H:i" }}</p>
+                                <p class="mb-1"><strong>Gerekçe:</strong> {{ basvuru.gerekce }}</p>
+                                <p class="mb-1">
+                                    <strong>Durum:</strong>
+                                    {% if basvuru.durum == 'beklemede' %}
+                                        <span class="badge bg-warning">Beklemede</span>
+                                    {% elif basvuru.durum == 'kabul' %}
+                                        <span class="badge bg-success">Kabul Edildi</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Reddedildi</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div>
+                                {% if basvuru.durum == 'beklemede' %}
+                                    <a href="{% url 'basvuru_degerlendir' basvuru.id %}" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-check"></i> Değerlendir
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted">Bu ilana henüz başvuru yapılmamış.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -16,7 +16,19 @@ def ilanlar(request):
 
 def ilan_detay(request, ilan_id):
     ilan = get_object_or_404(Ilan, id=ilan_id)
-    if request.method == 'POST':
+    basvuru_yapildi = False
+    basvuru_yapilabilir = False
+    
+    if request.user.is_authenticated:
+        try:
+            kullanici_profil = request.user.kullaniciprofil
+            if kullanici_profil.rol == 'gonullu':
+                basvuru_yapilabilir = True
+                basvuru_yapildi = request.user.gonullu.basvurular.filter(ilan=ilan).exists()
+        except:
+            pass
+    
+    if request.method == 'POST' and basvuru_yapilabilir:
         form = BasvuruForm(request.POST)
         if form.is_valid():
             basvuru = form.save(commit=False)
@@ -30,7 +42,9 @@ def ilan_detay(request, ilan_id):
     
     return render(request, 'web/ilan_detay.html', {
         'ilan': ilan,
-        'form': form
+        'form': form,
+        'basvuru_yapildi': basvuru_yapildi,
+        'basvuru_yapilabilir': basvuru_yapilabilir
     })
 
 def giris(request):

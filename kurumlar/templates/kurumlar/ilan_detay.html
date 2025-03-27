@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">{{ ilan.baslik }}</h2>
+                    
+                    {% if messages %}
+                    <div class="messages mb-4">
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-4">
+                        <h5 class="text-muted mb-3">İlan Detayları</h5>
+                        <p>{{ ilan.aciklama }}</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5 class="text-muted mb-3">Gereksinimler</h5>
+                        <p>{{ ilan.gereksinimler }}</p>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5 class="text-muted mb-3">Konum</h5>
+                            <p><i class="fas fa-map-marker-alt me-2"></i>{{ ilan.konum }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="text-muted mb-3">Son Başvuru Tarihi</h5>
+                            <p><i class="far fa-calendar-alt me-2"></i>{{ ilan.son_basvuru_tarihi|date:"d.m.Y" }}</p>
+                        </div>
+                    </div>
+
+                    {% if user.is_authenticated and user.gonullu %}
+                        {% if ilan.son_basvuru_tarihi >= today %}
+                        <div class="d-grid">
+                            <a href="{% url 'gonulluler:basvuru_yap' ilan.id %}" class="btn btn-primary btn-lg">
+                                <i class="fas fa-paper-plane me-2"></i>Başvuru Yap
+                            </a>
+                        </div>
+                        {% else %}
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Bu ilan için başvuru süresi dolmuştur.
+                        </div>
+                        {% endif %}
+                    {% elif not user.is_authenticated %}
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>Başvuru yapabilmek için lütfen 
+                            <a href="{% url 'giris' %}">giriş yapın</a> veya 
+                            <a href="{% url 'kayit' %}">kayıt olun</a>.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">Kurum Bilgileri</h5>
+                    <h6 class="mb-3">{{ ilan.kurum.ad }}</h6>
+                    <p class="mb-2"><i class="fas fa-map-marker-alt me-2"></i>{{ ilan.kurum.adres }}</p>
+                    <p class="mb-2"><i class="fas fa-phone me-2"></i>{{ ilan.kurum.telefon }}</p>
+                    <p class="mb-2"><i class="fas fa-envelope me-2"></i>{{ ilan.kurum.email }}</p>
+                    {% if ilan.kurum.website %}
+                    <p class="mb-2">
+                        <i class="fas fa-globe me-2"></i>
+                        <a href="{{ ilan.kurum.website }}" target="_blank">Website</a>
+                    </p>
+                    {% endif %}
+                    <p class="mt-3">{{ ilan.kurum.aciklama }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

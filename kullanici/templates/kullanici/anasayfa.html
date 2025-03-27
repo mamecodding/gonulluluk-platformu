@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">Gönüllülük Platformuna Hoş Geldiniz</h2>
+                    <p class="card-text">
+                        Bu platform, gönüllü olmak isteyen kişiler ile gönüllü arayan kurumları bir araya getirmeyi amaçlamaktadır.
+                        Aşağıdaki butonlardan birini seçerek hemen başlayabilirsiniz.
+                    </p>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                        <a href="{% url 'kurumlar:ilanlar' %}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-list me-2"></i> İlanları Görüntüle
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="card-title">Son Eklenen İlanlar</h3>
+                    {% if son_ilanlar %}
+                        <div class="list-group">
+                            {% for ilan in son_ilanlar %}
+                            <a href="{% url 'kurumlar:ilan_detay' ilan.id %}" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">{{ ilan.baslik }}</h5>
+                                    <small>{{ ilan.olusturma_tarihi|date:"d.m.Y" }}</small>
+                                </div>
+                                <p class="mb-1">{{ ilan.kurum.ad }}</p>
+                                <small><i class="fas fa-map-marker-alt me-1"></i> {{ ilan.konum }}</small>
+                            </a>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">Henüz ilan bulunmamaktadır.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="card-title">Nasıl Çalışır?</h3>
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item">
+                            <i class="fas fa-user-plus text-primary me-2"></i>
+                            Ücretsiz hesap oluşturun
+                        </div>
+                        <div class="list-group-item">
+                            <i class="fas fa-search text-success me-2"></i>
+                            Size uygun ilanları bulun
+                        </div>
+                        <div class="list-group-item">
+                            <i class="fas fa-paper-plane text-info me-2"></i>
+                            Başvurunuzu yapın
+                        </div>
+                        <div class="list-group-item">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Başvurunuzu takip edin
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">İstatistikler</h3>
+                    <div class="row text-center">
+                        <div class="col-6 mb-3">
+                            <h4 class="text-primary">{{ toplam_ilan }}</h4>
+                            <small class="text-muted">Aktif İlan</small>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <h4 class="text-success">{{ toplam_gonullu }}</h4>
+                            <small class="text-muted">Gönüllü</small>
+                        </div>
+                        <div class="col-6">
+                            <h4 class="text-info">{{ toplam_kurum }}</h4>
+                            <small class="text-muted">Kurum</small>
+                        </div>
+                        <div class="col-6">
+                            <h4 class="text-warning">{{ toplam_basvuru }}</h4>
+                            <small class="text-muted">Başvuru</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

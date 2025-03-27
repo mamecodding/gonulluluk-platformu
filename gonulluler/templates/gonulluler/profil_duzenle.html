@@ -6,11 +6,11 @@
         <div class="col-md-6 offset-md-3">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">İlan Sil</h3>
+                    <h4 class="card-title">Profili Düzenle</h4>
                 </div>
                 <div class="card-body">
                     {% if messages %}
-                    <div class="messages">
+                    <div class="messages mb-3">
                         {% for message in messages %}
                         <div class="alert alert-{{ message.tags }}">
                             {{ message }}
@@ -19,19 +19,22 @@
                     </div>
                     {% endif %}
 
-                    <p>Bu ilanı silmek istediğinizden emin misiniz?</p>
-                    <p><strong>İlan Başlığı:</strong> {{ ilan.baslik }}</p>
-                    <p><strong>Kurum:</strong> {{ ilan.kurum.ad }}</p>
-                    <p><strong>Konum:</strong> {{ ilan.konum }}</p>
-                    <p><strong>Başlangıç Tarihi:</strong> {{ ilan.baslangic_tarihi }}</p>
-                    <p><strong>Bitiş Tarihi:</strong> {{ ilan.bitis_tarihi }}</p>
-                    <p><strong>Kontenjan:</strong> {{ ilan.kontenjan }}</p>
-                    
                     <form method="post">
                         {% csrf_token %}
+                        {% for field in form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                            <div class="alert alert-danger">
+                                {{ field.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
                         <div class="d-flex justify-content-between">
-                            <a href="{% url 'kurum_panel' %}" class="btn btn-secondary">İptal</a>
-                            <button type="submit" class="btn btn-danger">Sil</button>
+                            <a href="{% url 'gonulluler:gonullu_panel' %}" class="btn btn-secondary">İptal</a>
+                            <button type="submit" class="btn btn-primary">Kaydet</button>
                         </div>
                     </form>
                 </div>
