@@ -29,48 +29,26 @@ def kayit(request):
                 messages.error(request, 'Bu e-posta adresi ile zaten bir hesabınız bulunmaktadır. Lütfen farklı bir e-posta adresi kullanın.')
                 return render(request, 'kullanici/kayit.html', {'form': form, 'rol': rol})
             
-            # Create user first
-            user = form.save(commit=False)
-            user.save()
-            
-            # Create user profile
-            kullanici_profil = KullaniciProfil.objects.create(
-                user=user,
-                rol=rol
-            )
-            
-            # Create role-specific profile
-            if rol == 'kurum':
-                Kurum.objects.create(
-                    kullanici_profil=kullanici_profil,
-                    ad=form.cleaned_data.get('ad'),
-                    aciklama=form.cleaned_data.get('aciklama', ''),
-                    adres=form.cleaned_data.get('adres', ''),
-                    telefon=form.cleaned_data.get('telefon', ''),
-                    website=form.cleaned_data.get('website', '')
-                )
-            else:
-                Gonullu.objects.create(
-                    user=user,
-                    ad=form.cleaned_data.get('ad'),
-                    soyad=form.cleaned_data.get('soyad'),
-                    email=form.cleaned_data.get('email'),
-                    telefon=form.cleaned_data.get('telefon', ''),
-                    aday_turu='bireysel',  # Default value
-                    sehir='',  # Default empty value
-                    dogum_tarihi=None  # Default None value
-                )
-            
-            login(request, user)
-            messages.success(request, 'Kayıt işlemi başarılı!')
-            if rol == 'kurum':
-                return redirect('kurumlar:kurum_panel')
-            else:
-                return redirect('gonulluler:gonullu_panel')
+            try:
+                # Create user and related objects
+                user = form.save(commit=True)
+                
+                login(request, user)
+                messages.success(request, 'Kayıt işlemi başarılı!')
+                if rol == 'kurum':
+                    return redirect('kurumlar:kurum_panel')
+                else:
+                    return redirect('gonulluler:gonullu_panel')
+            except Exception as e:
+                messages.error(request, f'Kayıt işlemi sırasında bir hata oluştu: {str(e)}')
+                return render(request, 'kullanici/kayit.html', {'form': form, 'rol': rol})
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f'{field}: {error}')
     else:
         form = KayitForm(request=request)
     return render(request, 'kullanici/kayit.html', {'form': form, 'rol': rol})
-
 
 # Giriş yapma
 def giris(request):
@@ -97,7 +75,6 @@ def giris(request):
         else:
             messages.error(request, 'Kullanıcı adı veya şifre hatalı!')
     return render(request, 'kullanici/giris.html')
-
 
 # Çıkış yapma
 @login_required

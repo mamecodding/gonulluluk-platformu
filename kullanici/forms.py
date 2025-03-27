@@ -71,14 +71,14 @@ class KayitForm(UserCreationForm):
                     adres=self.cleaned_data['kurum_adres'],
                     telefon=self.cleaned_data['telefon'],
                     email=self.cleaned_data['email'],
-                    website=self.cleaned_data['kurum_website'],
-                    aciklama=self.cleaned_data['kurum_aciklama']
+                    website=self.cleaned_data.get('kurum_website', ''),
+                    aciklama=self.cleaned_data.get('kurum_aciklama', '')
                 )
                 KullaniciProfil.objects.create(
                     user=user,
                     rol='kurum',
                     telefon=self.cleaned_data['telefon'],
-                    sehir=self.cleaned_data['sehir'],
+                    sehir=self.cleaned_data.get('sehir', ''),
                     kurum=kurum
                 )
             else:
@@ -88,14 +88,15 @@ class KayitForm(UserCreationForm):
                     soyad=self.cleaned_data['soyad'],
                     email=self.cleaned_data['email'],
                     telefon=self.cleaned_data['telefon'],
-                    dogum_tarihi=self.cleaned_data['dogum_tarihi'],
-                    sehir=self.cleaned_data['sehir']
+                    aday_turu='bireysel',  # Default value
+                    sehir=self.cleaned_data.get('sehir', ''),  # Default empty value
+                    dogum_tarihi=self.cleaned_data.get('dogum_tarihi')  # Default None value
                 )
                 KullaniciProfil.objects.create(
                     user=user,
                     rol='gonullu',
                     telefon=self.cleaned_data['telefon'],
-                    sehir=self.cleaned_data['sehir']
+                    sehir=self.cleaned_data.get('sehir', '')
                 )
         return user
 

@@ -11,6 +11,11 @@ def gonullu_panel(request):
     return render(request, 'gonulluler/panel.html', {'basvurular': basvurular})
 
 @login_required
+def profil_goruntule(request):
+    gonullu = get_object_or_404(Gonullu, user=request.user)
+    return render(request, 'gonulluler/profil.html', {'gonullu': gonullu})
+
+@login_required
 def profil_duzenle(request):
     gonullu = get_object_or_404(Gonullu, user=request.user)
     if request.method == 'POST':
@@ -18,10 +23,10 @@ def profil_duzenle(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Profiliniz başarıyla güncellendi.')
-            return redirect('gonullulers:gonullu_panel')
+            return redirect('gonulluler:gonullu_panel')
     else:
         form = GonulluProfilForm(instance=gonullu)
-    return render(request, 'gonullulers/profil_duzenle.html', {'form': form})
+    return render(request, 'gonulluler/profil_duzenle.html', {'form': form})
 
 @login_required
 def basvuru_iptal(request, basvuru_id):
@@ -29,5 +34,5 @@ def basvuru_iptal(request, basvuru_id):
     if request.method == 'POST':
         basvuru.delete()
         messages.success(request, 'Başvurunuz başarıyla iptal edildi.')
-        return redirect('gonullulers:gonullu_panel')
-    return render(request, 'gonullulers/basvuru_iptal.html', {'basvuru': basvuru})
+        return redirect('gonulluler:gonullu_panel')
+    return render(request, 'gonulluler/basvuru_iptal.html', {'basvuru': basvuru})
