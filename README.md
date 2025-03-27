@@ -4,11 +4,10 @@ Bu proje, gönüllüler ve kurumlar arasında köprü kuran bir web platformudur
 
 ## Özellikler
 
-- Gönüllü ve kurum kullanıcı kaydı
-- İlan oluşturma ve yönetme
-- İlanlara başvuru yapma
-- Kullanıcı profilleri
-- Responsive tasarım
+- Gönüllü ve kurum kaydı
+- İlan oluşturma ve başvuru yapma
+- Profil yönetimi
+- Başvuru takibi
 
 ## Kurulum
 
@@ -45,9 +44,9 @@ python manage.py runserver
 ## Teknolojiler
 
 - Python 3.12
-- Django 5.1
-- Bootstrap 5
+- Django 5.1.7
 - SQLite
+- Bootstrap 5
 
 ## Lisans
 

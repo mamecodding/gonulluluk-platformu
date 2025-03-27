@@ -25,6 +25,7 @@ class GonulluKayitForm(UserCreationForm):
                 user=user,
                 ad=self.cleaned_data['ad'],
                 soyad=self.cleaned_data['soyad'],
+                email=self.cleaned_data['email'],
                 telefon=self.cleaned_data['telefon'],
                 aday_turu=self.cleaned_data['aday_turu'],
                 dogum_tarihi=self.cleaned_data['dogum_tarihi'],
@@ -33,7 +34,7 @@ class GonulluKayitForm(UserCreationForm):
         return user
 
 class GonulluProfilForm(forms.ModelForm):
-    email = forms.EmailField(required=True)
+    email = forms.EmailField(required=True, label="E-Posta", widget=forms.EmailInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = Gonullu
@@ -49,14 +50,14 @@ class GonulluProfilForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.instance.user:
+        if self.instance and self.instance.user:
             self.fields['email'].initial = self.instance.user.email
-            self.fields['email'].widget.attrs.update({'class': 'form-control'})
 
     def save(self, commit=True):
         instance = super().save(commit=False)
         if commit:
             instance.save()
-            instance.user.email = self.cleaned_data['email']
-            instance.user.save()
+            if 'email' in self.cleaned_data:
+                instance.user.email = self.cleaned_data['email']
+                instance.user.save()
         return instance 

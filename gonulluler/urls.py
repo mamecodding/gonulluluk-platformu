@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 
-app_name = 'gonulluler'
+app_name = 'gonulluler'  # BUNU EKLEYİN
 
 urlpatterns = [
     path('panel/', views.gonullu_panel, name='gonullu_panel'),
