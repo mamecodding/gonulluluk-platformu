@@ -20,6 +20,22 @@ def ilan_detay(request, ilan_id):
     return render(request, 'kurumlar/ilan_detay.html', context)
 
 @login_required
+def ilan_ekle(request):
+    kurum = get_object_or_404(Kurum, kullaniciprofil__user=request.user)
+    if request.method == 'POST':
+        form = IlanForm(request.POST)
+        if form.is_valid():
+            ilan = form.save(commit=False)
+            ilan.kurum = kurum
+            ilan.save()
+            messages.success(request, 'İlan başarıyla oluşturuldu.')
+            return redirect('kurumlar:kurum_panel')
+    else:
+        form = IlanForm()
+    return render(request, 'kurumlar/ilan_ekle.html', {'form': form})
+
+
+@login_required
 def kurum_panel(request):
     kurum = get_object_or_404(Kurum, kullaniciprofil__user=request.user)
     ilanlar = Ilan.objects.filter(kurum=kurum).order_by('-olusturma_tarihi')

@@ -12,12 +12,21 @@ def gonullu_panel(request):
 
 @login_required
 def profil_goruntule(request):
-    gonullu = get_object_or_404(Gonullu, user=request.user)
+    try:
+        gonullu = request.user.gonullu
+    except Gonullu.DoesNotExist:
+        messages.error(request, "Profil bulunamadı. Lütfen kayıt olun.")
+        return redirect('kayit')  # Veya başka bir yönlendirme
     return render(request, 'gonulluler/profil.html', {'gonullu': gonullu})
 
 @login_required
 def profil_duzenle(request):
-    gonullu = get_object_or_404(Gonullu, user=request.user)
+    try:
+        gonullu = request.user.gonullu
+    except Gonullu.DoesNotExist:
+        messages.error(request, "Profil bulunamadı. Lütfen kayıt olun.")
+        return redirect('kayit')  # Veya başka bir yönlendirme
+
     if request.method == 'POST':
         form = GonulluProfilForm(request.POST, instance=gonullu)
         if form.is_valid():
